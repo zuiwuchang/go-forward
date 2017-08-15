@@ -14,8 +14,15 @@ func (CommandLogin) Code() uint16 {
 func (CommandLogin) Execute(c net.Conn, session Session, b []byte) error {
 	cnf := getConfigure()
 	if cnf.Pwd != string(b) {
-		return errors.New("pwd not match")
+		e := errors.New("pwd not match")
+		if e != nil {
+			logDebug.Println(e, session)
+		}
+		return e
 	}
+	session.timer.Stop()
 	session.login = true
-	return nil
+	logTrace.Println("one login", session)
+
+	return writeData(c, CmdLogin, nil)
 }

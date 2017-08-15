@@ -24,6 +24,13 @@ func main() {
 		log.Fatalln(e)
 	}
 	cnf := getConfigure()
+	//初始化 日誌
+	if cnf.LogLine {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+	}
+
+	//初始化 加密模塊
+	initCrypto(cnf.Key)
 
 	//創建服務器 模板
 	cmds := make(map[uint16]ICommand)
@@ -35,9 +42,10 @@ func main() {
 	//創建服務器
 	s, e := echo.NewServer(cnf.LAddr, cnf.Timeout*time.Second, server)
 	if e != nil {
-		log.Fatalln(e)
+		logFault.Println(e)
+		return
 	}
-	log.Println("work at", cnf.LAddr)
+	logInfo.Println("work at", cnf.LAddr)
 
 	//運行服務器
 	s.Run()

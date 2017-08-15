@@ -13,10 +13,13 @@ type Configure struct {
 	Pwd       string
 	BigEndian bool
 	Service   []Service
-	Services  map[int64]string
+	Services  map[uint16]string
+	Logs      []string
+	Log       map[string]int
+	LogLine   bool
 }
 type Service struct {
-	Id   int64
+	Id   uint16
 	Addr string
 }
 
@@ -36,10 +39,16 @@ func initConfigure() error {
 		return e
 	}
 
-	cnf.Services = make(map[int64]string)
+	cnf.Services = make(map[uint16]string)
 	for _, node := range cnf.Service {
 		cnf.Services[node.Id] = node.Addr
 	}
 	cnf.Service = nil
+
+	cnf.Log = make(map[string]int)
+	for _, node := range cnf.Logs {
+		cnf.Log[node] = 1
+	}
+	cnf.Logs = nil
 	return nil
 }

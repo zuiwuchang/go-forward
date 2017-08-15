@@ -22,6 +22,20 @@
 
 			"_comment":"服務 地址",
 			"Addr":"127.0.0.1:3389"
+		},
+		{
+			"Id":2,
+			"Addr":"127.0.0.1:9666"
 		}
-	]
+	],
+	"_comment":"要打印的日誌 信息 TRACE DEBUG INFO ERROR FAULT",
+	"Logs":[
+		"TRACE",
+		"DEBUG",
+		"INFO",
+		"ERROR",
+		"FAULT"
+	],
+	"_comment":"日誌是否要打印 代碼行",
+	"LogLine":true
 }

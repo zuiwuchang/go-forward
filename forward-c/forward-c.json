@@ -1,0 +1,19 @@
+{
+	"_comment":"本地監聽地址",
+	"LAddr":":6666",
+	
+	"_comment":"服務器工作地址",
+	"Addr":"127.0.0.1:1102",
+
+	"_comment":"數據加密key",
+	"Key":"Cerber is an idea",
+
+	"_comment":"驗證密碼",
+	"Pwd":"i'm king",
+
+	"_comment":"是否使用 大端序",
+	"BigEndian":false,
+
+	"_comment":"要轉接的服務id",
+	"Service":2
+}
