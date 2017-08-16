@@ -76,7 +76,8 @@ func (s *Server) Message(c net.Conn, session echo.Session, b []byte) error {
 		if e != nil {
 			return e
 		}
-		return cmd.Execute(c, session.(Session), b)
+		s0 := session.(*Session)
+		return cmd.Execute(c, s0, b)
 	}
 	e := errors.New("command unknow")
 	logDebug.Println(e, session)

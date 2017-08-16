@@ -11,7 +11,7 @@ type CommandLogin struct {
 func (CommandLogin) Code() uint16 {
 	return CmdLogin
 }
-func (CommandLogin) Execute(c net.Conn, session Session, b []byte) error {
+func (CommandLogin) Execute(c net.Conn, session *Session, b []byte) error {
 	cnf := getConfigure()
 	if cnf.Pwd != string(b) {
 		e := errors.New("pwd not match")

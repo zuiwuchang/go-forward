@@ -6,5 +6,5 @@ import (
 
 type ICommand interface {
 	Code() uint16
-	Execute(c net.Conn, session Session, b []byte) error
+	Execute(c net.Conn, session *Session, b []byte) error
 }

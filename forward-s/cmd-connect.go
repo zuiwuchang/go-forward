@@ -11,7 +11,7 @@ type CommandConnect struct {
 func (CommandConnect) Code() uint16 {
 	return CmdConnect
 }
-func (CommandConnect) Execute(c net.Conn, session Session, b []byte) error {
+func (CommandConnect) Execute(c net.Conn, session *Session, b []byte) error {
 	if !session.login {
 		e := errors.New("not loin")
 		logDebug.Println(e, session)
