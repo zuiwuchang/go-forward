@@ -15,5 +15,16 @@
 	"BigEndian":false,
 
 	"_comment":"要轉接的服務id",
-	"Service":2
+	"Service":2,
+
+	"_comment":"要打印的日誌 信息 TRACE DEBUG INFO ERROR FAULT",
+	"Logs":[
+		"TRACE",
+		"DEBUG",
+		"INFO",
+		"ERROR",
+		"FAULT"
+	],
+	"_comment":"日誌是否要打印 代碼行",
+	"LogLine":true
 }
