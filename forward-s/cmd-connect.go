@@ -28,7 +28,11 @@ func (CommandConnect) Execute(c net.Conn, session *Session, b []byte) error {
 	cnf := getConfigure()
 	if addr, ok := cnf.Services[id]; ok {
 		e := session.Init(addr)
-		logDebug.Println(e, session)
+		if e == nil {
+			logTrace.Println("one connect", session)
+		} else {
+			logDebug.Println(e, session)
+		}
 		return e
 	}
 

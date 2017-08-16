@@ -28,7 +28,12 @@ func NewForward(c net.Conn) (*Forward, error) {
 	}
 	logTrace.Println("connect ok")
 	forward := &Forward{cc: c, cs: cs}
-
+	defer func() {
+		if e != nil {
+			c.Close()
+			cs.Close()
+		}
+	}()
 	//登入
 	e = forward.login()
 	if e != nil {
@@ -41,7 +46,32 @@ func NewForward(c net.Conn) (*Forward, error) {
 		return nil, e
 	}
 	logTrace.Println("connect ok")
+
 	return forward, nil
+}
+func (f *Forward) connect1() error {
+	cnf := getConfigure()
+	c := f.cs
+	order := getByteOrder()
+
+	b := make([]byte, 2)
+	order.PutUint16(b, cnf.Service)
+
+	e := writeData(c, CmdWrite, b)
+	if e != nil {
+		return e
+	}
+	b, e = c.GetMessage(0)
+	if e != nil {
+		return e
+	}
+	if order.Uint16(b[4:]) != CmdWrite {
+		return errors.New("bad rs cmd CmdWrite")
+	}
+	if len(b) != HeaderSize {
+		return errors.New("bad rs len CmdWrite")
+	}
+	return nil
 }
 func (f *Forward) connect() error {
 	cnf := getConfigure()
@@ -67,6 +97,7 @@ func (f *Forward) connect() error {
 	}
 	return nil
 }
+
 func (f *Forward) login() error {
 	cnf := getConfigure()
 	c := f.cs
@@ -91,24 +122,12 @@ func (f *Forward) login() error {
 	return nil
 }
 func (f *Forward) Run() {
-	ch := make(chan []byte, 5)
-	chExit := make(chan int, 1)
+	cs := f.cs
+	cc := f.cc
 	go func() {
-		cs := f.cs
-		defer cs.Close()
-		for {
-			select {
-			case <-chExit:
-				return
-			case <-ch:
 
-			}
-		}
-	}()
-	go func() {
 		order := getByteOrder()
-		cs := f.cs
-		cc := f.cc
+
 		for {
 			b, e := cs.GetMessage(0)
 			if e != nil {
@@ -132,23 +151,23 @@ func (f *Forward) Run() {
 			}
 		}
 		cs.Close()
+		cc.Close()
 	}()
-	defer func() {
-		chExit <- 1
-	}()
+
 	b := make([]byte, 1024)
-	c := f.cc
+
 	for {
-		n, e := c.Read(b)
+		n, e := cc.Read(b)
 		if e != nil {
 			break
 		}
-		e = writeData(c, CmdWrite, b[:n])
+		e = writeData(cs, CmdWrite, b[:n])
 		if e != nil {
 			break
 		}
 	}
-	c.Close()
+	cc.Close()
+	cs.Close()
 }
 func writeData(c net.Conn, cmd uint16, b []byte) error {
 	//加密數據

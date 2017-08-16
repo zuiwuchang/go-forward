@@ -3,7 +3,8 @@
 	"LAddr":":6666",
 	
 	"_comment":"服務器工作地址",
-	"Addr":"127.0.0.1:1102",
+	"Addr1":"127.0.0.1:1102",
+	"Addr":"192.168.1.204:1102",
 
 	"_comment":"數據加密key",
 	"Key":"Cerber is an idea",
@@ -15,7 +16,7 @@
 	"BigEndian":false,
 
 	"_comment":"要轉接的服務id",
-	"Service":2,
+	"Service":1,
 
 	"_comment":"要打印的日誌 信息 TRACE DEBUG INFO ERROR FAULT",
 	"Logs":[

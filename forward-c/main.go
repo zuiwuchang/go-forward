@@ -52,6 +52,7 @@ func doWork(c net.Conn) {
 	forward, e := NewForward(c)
 	if e != nil {
 		logError.Println(e)
+		return
 	}
 	forward.Run()
 }
