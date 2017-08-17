@@ -1,46 +1,62 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
 	"log"
+	"os"
 )
 
-type ILog interface {
-	Printf(format string, v ...interface{})
-	Println(v ...interface{})
-}
-type Log struct {
-	flag string
+var logTrace *log.Logger
+var logDebug *log.Logger
+var logInfo *log.Logger
+var logError *log.Logger
+var logFault *log.Logger
+
+type nullOut struct {
 }
 
-var logTrace *Log = &Log{flag: "TRACE"}
-var logDebug *Log = &Log{flag: "DEBUG"}
-var logInfo *Log = &Log{flag: "INFO"}
-var logError *Log = &Log{flag: "ERROR"}
-var logFault *Log = &Log{flag: "FAULT"}
+func (nullOut) Write(b []byte) (int, error) {
+	return len(b), nil
+}
 
-func (l *Log) Printf(format string, v ...interface{}) {
+func initLog() {
 	cnf := getConfigure()
-	if _, ok := cnf.Log[l.flag]; ok {
-		flag := fmt.Sprintf("[%v] ", l.flag)
-		log.Printf(flag+format, v...)
+	flag := log.LstdFlags
+	if cnf.LogLine {
+		flag |= log.Lshortfile
 	}
-}
-func (l *Log) Println(v ...interface{}) {
-	cnf := getConfigure()
-	if _, ok := cnf.Log[l.flag]; ok {
-		var buf bytes.Buffer
-		flag := fmt.Sprintf("[%v] ", l.flag)
-		buf.WriteString(flag)
-		for i, node := range v {
-			if i != 0 {
-				buf.WriteString(" ")
 
-			}
-			buf.WriteString(fmt.Sprint(node))
-		}
+	if _, ok := cnf.Log["TRACE"]; ok {
+		logTrace = log.New(os.Stdout, "[TRACE] ", flag)
+	} else {
 
-		log.Println(buf.String())
+		logTrace = log.New(nullOut{}, "[TRACE] ", flag)
+	}
+
+	if _, ok := cnf.Log["DEBUG"]; ok {
+		logDebug = log.New(os.Stdout, "[DEBUG] ", flag)
+	} else {
+
+		logDebug = log.New(nullOut{}, "[DEBUG] ", flag)
+	}
+
+	if _, ok := cnf.Log["INFO"]; ok {
+		logInfo = log.New(os.Stdout, "[INFO] ", flag)
+	} else {
+
+		logInfo = log.New(nullOut{}, "[INFO] ", flag)
+	}
+
+	if _, ok := cnf.Log["ERROR"]; ok {
+		logError = log.New(os.Stdout, "[ERROR] ", flag)
+	} else {
+
+		logError = log.New(nullOut{}, "[ERROR] ", flag)
+	}
+
+	if _, ok := cnf.Log["FAULT"]; ok {
+		logFault = log.New(os.Stdout, "[FAULT] ", flag)
+	} else {
+
+		logFault = log.New(nullOut{}, "[FAULT] ", flag)
 	}
 }

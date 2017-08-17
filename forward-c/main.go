@@ -24,9 +24,7 @@ func main() {
 	}
 	cnf := getConfigure()
 	//初始化 日誌
-	if cnf.LogLine {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-	}
+	initLog()
 
 	//初始化 加密模塊
 	initCrypto(cnf.Key)
