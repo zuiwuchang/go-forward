@@ -2,14 +2,14 @@
 
 forward 是孤 使用 go 開發的 一個 tcp 隧道 它可以爲 服務器 - 客戶端 之間建立起來 安全的 加密傳輸 並且這些操作 對於服務器 客戶端 來說 是 透明的
 
-#crypto.go
+# crypto.go
 
 crypto.go 檔案中 定義了兩個 Encryption Decryption 加密/解密 兩個函數 你只需要 簡單的修改 這兩個函數 就可以 替換爲你自己的加密實現 孤使用 king-go 庫的一個加密算法
 
 king-go 是孤另外一個 開源的 go 代碼庫 https://github.com/zuiwuchang/king-go
 
 
-#forward-s
+# forward-s
 
 forward-s 爲隧道服務器 forward-s.json 檔案 定義了 服務器配置
 
@@ -62,7 +62,7 @@ forward-s 爲隧道服務器 forward-s.json 檔案 定義了 服務器配置
 此時 如果 客戶端 連接 forward-s 並且 請求 服務 1 則會 建立一個 到服務器 127.0.0.1:3389 的 安全 隧道
 
 
-#forward-c
+# forward-c
 
 forward-c 會爲 隧道 客戶端 forward-c 會打開指定 的端口 並且 將此端口 和 服務器 之間 建立一個 安全的 隧道 forward-c.json 定義了 forward-c 的行爲
 
